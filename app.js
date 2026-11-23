@@ -20,7 +20,7 @@ function home(){
   html+=`<div class="center"><button class="btn red" id="reset" style="max-width:240px">進捗をリセット</button></div>`;
   app.innerHTML=html;
   app.querySelectorAll(".node[data-u]").forEach(b=>b.onclick=()=>start(+b.dataset.u,+b.dataset.l));
-  $("#reset").onclick=()=>{if(confirm("進捗をリセットしますか？")){S={xp:0,hearts:MAXH,streak:0,last:"",done:{}};save();home()}};
+  let armed=false;$("#reset").onclick=e=>{if(!armed){armed=true;e.target.textContent="もう一度押すとリセット";return}S={xp:0,hearts:MAXH,streak:0,last:"",done:{}};save();home()};
 }
 
 function start(ui,li){
@@ -33,7 +33,7 @@ function start(ui,li){
     app.innerHTML=`<div style="display:flex;align-items:center;gap:12px"><button class="quit" id="x">✕</button><div class="bar" style="flex:1;margin:0"><i style="width:${pct}%"></i></div></div>
       <div class="q">${q.q}</div>${q.o.map((t,n)=>`<button class="opt" data-n="${n}">${t}</button>`).join("")}
       <div class="foot" id="foot"><div class="in"><button class="btn" id="go" disabled>チェック</button></div></div>`;
-    $("#x").onclick=()=>{if(confirm("レッスンを中断しますか？"))home()};
+    $("#x").onclick=home;
     const opts=[...app.querySelectorAll(".opt")];
     opts.forEach(b=>b.onclick=()=>{if(checked)return;sel=+b.dataset.n;opts.forEach(o=>o.classList.remove("sel"));b.classList.add("sel");$("#go").disabled=false});
     $("#go").onclick=()=>{
